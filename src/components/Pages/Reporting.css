@@ -1,0 +1,30 @@
+/* Reporting.css */
+
+.reporting-container {
+    margin: 20px;
+  }
+  
+  .reporting-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .reporting-table th,
+  .reporting-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .reporting-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .reporting-table .sender {
+    background-color: #dff0d8;
+  }
+  
+  .reporting-table .receiver {
+    background-color: #d9edf7;
+  }
+  

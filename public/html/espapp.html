@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Data Display</title>
+  <style>
+    /* Your CSS styles here */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      max-width: 90%;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .data-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .data-item {
+      text-align: center;
+      width: 25%;
+      margin-bottom: 20px;
+    }
+
+    .data-item h2 {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .value {
+      font-size: 24px;
+      font-weight: bold;
+      color: #6eb7ff;
+    }
+
+    #dataTable {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      border: 1px solid #ccc;
+    }
+
+    #dataTable th,
+    #dataTable td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+
+    #dataTable th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+
+    .table-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 300px;
+    }
+
+    .download-btn {
+      padding: 10px;
+      font-size: 20px;
+      border-radius: 10px;
+      border: none;
+      background-color: #fff;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    .navbar {
+      background-color: #333;
+      overflow: hidden;
+    }
+
+    .navbar-brand {
+      float: left;
+      padding: 14px 16px;
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    .navbar-brand:hover {
+      /* background-color: #ddd; */
+      color: black;
+    }
+
+    .navbar-nav {
+      float: right;
+      margin-right: 20px;
+    }
+
+    .navbar-nav a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .navbar-nav a:hover {
+      /* background-color: #ddd; */
+      color: yellow;
+      
+    }
+
+    @media only screen and (max-width: 768px) {
+      .data-item {
+        width: 100%;
+      }
+    }
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <!-- Navbar brand/logo -->
+      <a class="navbar-brand" href="#">Firebase Data</a>
+      <!-- Navbar toggler for mobile -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- Navbar links -->
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="../../src/components/Pages/Home.js">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../../src/components/Pages/Interactivemap.js">Interactive Map</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../../src/components/Pages/Adfeatue.js">Advanced Features</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./espapp.html">Predictive Maintenance</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../../src/components/Pages/Report.js">Reporting</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../../src/components/Pages/Dashboard.js">Dashboard</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>Flow Sensor Data</h1>
+    <div class="data-container">
+      <div class="data-item">
+        <h2>Equipment</h2>
+        <p class="value" id="equipment">Pipe A - Pipe B</p>
+      </div>
+      <div class="data-item">
+        <h2>Flowrate</h2>
+        <p class="value" id="flowrate"></p>
+      </div>
+      <div class="data-item">
+        <h2>pH Level</h2>
+        <p class="value" id="ph"></p>
+      </div>
+    </div>
+  </div>
+  <button onclick="downloadExcel()" class="download-btn btn btn-primary">Download Data</button>
+
+  <table id="dataTable">
+    <thead>
+      <tr>
+        <th>Date & Time</th>
+        <th>Equipment</th>
+        <th>Flowrate</th>
+        <th>pH Level</th>
+      </tr>
+    </thead>
+    <tbody id="dataTableBody">
+      <!-- Table data will be inserted here dynamically -->
+    </tbody>
+  </table>
+
+  <!-- Bootstrap and Firebase scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+
+
+  <script>
+    // Your JavaScript code here
+
+    // Function to download Excel file
+    function downloadExcel() {
+      var table = document.getElementById('dataTable');
+      var rows = table.getElementsByTagName('tr');
+      var csv = [];
+      for (var i = 0; i < rows.length; i++) {
+        var row = [],
+          cols = rows[i].querySelectorAll('td, th');
+        for (var j = 0; j < cols.length; j++) row.push(cols[j].innerText);
+        csv.push(row.join(','));
+      }
+      var csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
+      var encodedUri = encodeURI(csvContent);
+      var link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', 'flow_data.csv');
+      document.body.appendChild(link);
+      link.click();
+    }
+
+    // Initialize Firebase
+    var firebaseConfig = {
+        apiKey: "AIzaSyA4nmXEhs-RKAor6Ta3JI-WEVK8Yb2Lm4U",
+        authDomain: "newflow-8dec7.firebaseapp.com",
+        databaseURL: "https://newflow-8dec7-default-rtdb.firebaseio.com",
+        projectId: "newflow-8dec7",
+        storageBucket: "newflow-8dec7.appspot.com",
+        messagingSenderId: "592265566431",
+        appId: "1:592265566431:web:3b29478903de6a5a47316a"
+    };
+
+    // Replace the placeholder values above with your actual Firebase configuration
+
+    firebase.initializeApp(firebaseConfig);
+
+    // Reference to the database
+    var database = firebase.database();
+
+    // Reference to the data
+    var dataRef = database.ref('flow_data');
+
+    // Function to update date and time
+    function updateDateTime() {
+      var now = new Date();
+      return now.toLocaleString();
+    }
+
+    // Function to generate random pH level between 6.5 to 8.5
+    function generateRandomPH() {
+      return (Math.random() * (8.5 - 6.5) + 6.5).toFixed(2);
+    }
+
+    // Fetch the data
+    dataRef.on('value', function (snapshot) {
+      var data = snapshot.val();
+      document.getElementById('flowrate').innerHTML = data.Flowrate;
+
+      // Generate random pH level
+      var phLevel = generateRandomPH();
+
+      // Update pH level in data-container
+      var phContainer = document.getElementById('ph');
+      phContainer.innerHTML = 'pH Level: ' + phLevel;
+
+      // Update table for future use
+      var table = document.getElementById('dataTable');
+      var newRow = table.insertRow(-1); // Insert row at the end of the table
+
+var cellDateTime = newRow.insertCell(0);
+var cellEquipment = newRow.insertCell(1);
+var cellFlowrate = newRow.insertCell(2);
+var cellPH = newRow.insertCell(3);
+
+cellDateTime.innerHTML = updateDateTime();
+cellEquipment.innerHTML = 'Pipe A - Pipe B'; // Hardcoded equipment name
+cellFlowrate.innerHTML = data.Flowrate;
+cellPH.innerHTML = phLevel;
+});
+
+// Update pH level every 5 minutes
+setInterval(function () {
+var phLevel = generateRandomPH();
+
+// Update pH level in data-container
+var phContainer = document.getElementById('ph');
+phContainer.innerHTML = 'pH Level: ' + phLevel;
+
+// Update pH level in the table
+var table = document.getElementById('dataTable');
+var rows = table.getElementsByTagName('tr');
+var lastRow = rows[rows.length - 1];
+var cellPH = lastRow.insertCell(3);
+cellPH.innerHTML = phLevel;
+}, 300000); // 5 minutes = 300,000 milliseconds
+</script>
+</body>
+
+</html>

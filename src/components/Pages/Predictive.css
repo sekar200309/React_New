@@ -1,0 +1,33 @@
+/* Predictive.css */
+
+.table-container {
+  margin-top: 20px;
+}
+
+.table-container h2 {
+  text-align: center;
+}
+
+.predictive-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.predictive-table th,
+.predictive-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.predictive-table th {
+  background-color: #f2f2f2;
+}
+
+.predictive-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.predictive-table tbody tr:hover {
+  background-color: #ddd;
+}
